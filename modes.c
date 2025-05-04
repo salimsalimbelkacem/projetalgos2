@@ -4,17 +4,30 @@
 #include <string.h>
 #include <time.h>
 
+#define INPUT_STRING_SIZE 100
+
 void encrypt(){
     int size, auxilary;
-    char string[100];
+    char string[INPUT_STRING_SIZE];
 
     //input the string ------------------------------------------------------------
     puts("Enter the message: ");
-    /* note from 2025 salim: 99 means that scanf will stop reading at the 99th character inputed,
-     * good practice, to avoid what we call a buffer overflow
+
+    /* note from 2025 salim: fgets is a function that reads pure strings from the
+     * a given file, in here the given file is stdin (standard input) by inputing 
+     * something in the cli it writes it to this file which is somewhere in the os
+     * (/dev/stdin for unix idk about windows) then fgets reads until the n 1st characters
+     * in that file, in our case the INPUT_STRING_SIZE 1st chars in that file and no more
      * */
-    scanf(" %99s", string);
+    fgets(string, INPUT_STRING_SIZE, stdin);
+
+    /* note from 2025 salim: the problem with fgets is that it read the data as it is in
+     * stdin so when you press enter it reads the enter character \n so you have to remplace
+     * it with \0
+     * */
+    string[strcspn(string, "\n")] = '\0';
     size = strlen(string);
+
     //-----------------------------------------------------------------------------
 
     clock_t begin = clock(); //tic
