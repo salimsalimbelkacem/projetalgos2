@@ -24,6 +24,8 @@ void encrypt(){
     /* note from 2025 salim: the problem with fgets is that it read the data as it is in
      * stdin so when you press enter it reads the enter character \n so you have to remplace
      * it with \0
+     *
+     * strcspn returns the index of \n in string (not really than but technicaly is that)
      * */
     string[strcspn(string, "\n")] = '\0';
     size = strlen(string);
