@@ -1,0 +1,25 @@
+
+peut servir mais ne sert a rien pour l'instant
+en plus j'ai fait des petits dessins sue le code c'est dommage de le perdre
+
+unsigned int decimalToGray(unsigned int num){
+  //                                                  W                      \\\\\
+                             //                 o° C(O|o)D                  /(o> *D
+    return num ^ (num >> 1); // (chat j'ai pété)      o       (il pense)>   =|_/ |
+}
+// en  gros '^' ça veux dire xor (il xor chaque bits avec le bit corespondant de sa version décalé) 
+//et justement '>>' ça veux dire on décale les bites une fois, bah ducoup il se fait xored voila!!!
+//et il retourne le truc en binaire gray meme avec l'input en décimal!! truc de ouf non? (non)
+// c'est comme on fessait en S1 en sm tqt pas frero c'est facile!!!
+
+unsigned int grayToDecimal(unsigned int gray) // ça c'est l'inverse ducoup...
+{
+    unsigned int num = gray;
+    unsigned int mask;
+
+    for (mask = gray >> 1; mask != 0; mask = mask >> 1) {
+      num = num ^ mask;                                  
+    }
+
+    return num;
+}
