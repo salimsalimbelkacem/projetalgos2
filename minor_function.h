@@ -2,11 +2,11 @@
 #define MINOR_FUNCTUON
 #include <stdbool.h>
 
-long BIN(int N);
-int sum_binary(int bin);
+long BIN(int);
+int sum_binary(int);
 
-double riemann_sum(int);
+// double riemann_sum();
 
-int generate_key(long bin);
-int decrypte_key(int sum, int key);
+int generate_key(long);
+int decrypte_key(int,int);
 #endif
