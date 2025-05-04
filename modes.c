@@ -10,8 +10,7 @@ void encrypt(){
 
     //input the string ------------------------------------------------------------
     puts("Enter the message: ");
-    /*
-     * 99 means that scanf will stop reading at the 99th character inputed,
+    /* note from 2025 salim: 99 means that scanf will stop reading at the 99th character inputed,
      * good practice, to avoid what we call a buffer overflow
      * */
     scanf(" %99s", string);
