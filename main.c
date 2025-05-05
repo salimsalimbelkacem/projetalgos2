@@ -1,35 +1,13 @@
-/* note from 2025 salim:
- * hello liza (and racha) euhhh that is the cryto part the
- * only part you have to do, i don't exactly remember what
- * happens in the program, and i kinda lost the report and
- * the presentation, idk if it's the time to ask anes for
- * them tbh with the intership and pfe but whatever. i hope
- * you'll understand the code, it is prety terrible, the
- * keygen and decrypting part looks confusing idk how to
- * explain it but euhh yeah
- *
- * maybe you can ask yasser for our report and presentation
- * 
- * and i think the steps are different anyway, we had to
- * guess what to do, we didn't have clear steps but only
- * uncoherent blob of texts (boohoo) :(
- *
- * there's a lot of things that can be optimized like a lot
- * of things, i don't have the energy to look them all up,
- * but whatever 
- *
- * i wish you the best and i love you (liza)
- * */
-
 #include "modes.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
 
-bool keep_going ();
+bool keep_going();
 
 int main() {
     int choice;
+
     /* note from 2025 salim: puts is a function that prints pure
      * strings and not formated string like printf, it's a little
      * faster when you print a string that does not need to be 
@@ -40,14 +18,14 @@ int main() {
      * function that only prints pure strings without the trailing \n
      * la flem to check do it yourself
      * */
+
     puts("welcome to the second part of the project");
     do {
         puts("please select one of the following mode");
         printf("1. encrypt\n2. decrypt\n>>");
 
-        if (scanf(" %d", &choice) == 0) {
+        if (scanf(" %d", &choice) == 0) 
             puts("type 1 for the 'encrypt mode'\n and 2 for the 'decrypt mode'");
-        }
 
         /* note from 2025 salim: this is a short if, or a ternary operator
          *
@@ -75,19 +53,29 @@ int main() {
          * TODO: the program doesnt check if the in inputed interger is 1 or 2, 3 would be an accepted answer here
          * and would probably call the decrypt function
          * */
-        (choice-1)?  decrypt() : encrypt();
 
+        (choice-1)?  decrypt() : encrypt();
     }while(keep_going());
 
 }
 
 
 /*
-   _ -        
+     _ -        
    C(o|O)D
-   \o/  <(!)
+     \o/  <(!)
    */
 
+/* note from 2025 salim: generally in cli programs
+ * when a y/n choice is presented, the one in uppercase
+ * is the default, which means it is the choice choosen when
+ * the user writes nothing and presses enter
+ *
+ * also the tolower() function is a function from the ctype library,
+ * in case he writes a upper case y or n, it would be still valid
+ * idk if its faster, but it makes the code slightly more readable
+ * bc you check once for each letter not twice (can see the 1st commit)
+ * */
 bool keep_going(){
     char choice='\0';
     
@@ -95,17 +83,6 @@ bool keep_going(){
             choice != 'n' &&
             choice != '\n'
          ) {
-        getchar();
-        /* note from 2025 salim: generally in cli programs
-         * when a y/n choice is presented, the one in uppercase
-         * is the default, which means it is the choice choosen when
-         * the user writes nothing and presses enter
-         *
-         * also the tolower() function is a function from the ctype library,
-         * in case he writes a upper case y or n, it would be still valid
-         * idk if its faster, but it makes the code slightly more readable
-         * bc you check once for each letter not twice (can see the 1st commit)
-         * */
         printf("do you want to continue?[y/N] ");
         choice = tolower(getchar());
     }

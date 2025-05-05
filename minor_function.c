@@ -1,9 +1,5 @@
 #include <math.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 
 // tout ce qui est binaire
 
@@ -12,8 +8,10 @@ long BIN(int N) {
   int bits = 0;
   long bin = 0;
 
-  for (int i = 1; pow(2, i) <= N; i++) bits = i;
-  for (int i = bits; i >= 0; i--) bin = bin * 10 + ((x >> i) & 1);
+  for (int i = 1; pow(2, i) <= N; i++)
+      bits = i;
+  for (int i = bits; i >= 0; i--)
+      bin = bin * 10 + ((x >> i) & 1);
   
   return bin;
 }

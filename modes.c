@@ -10,6 +10,8 @@ void encrypt(){
     int size, auxilary;
     char string[INPUT_STRING_SIZE];
 
+    printf("%d\n", getchar());
+
     //input the string ------------------------------------------------------------
     puts("Enter the message: ");
 
@@ -19,13 +21,14 @@ void encrypt(){
      * (/dev/stdin for unix idk about windows) then fgets reads until the n 1st characters
      * in that file, in our case the INPUT_STRING_SIZE 1st chars in that file and no more
      * */
-    fgets(string, INPUT_STRING_SIZE, stdin);
+    fgets( string, INPUT_STRING_SIZE, stdin );
+    
 
     /* note from 2025 salim: the problem with fgets is that it read the data as it is in
      * stdin so when you press enter it reads the enter character \n so you have to remplace
      * it with \0
      *
-     * strcspn returns the index of \n in string (not really than but technicaly is that)
+     * strcspn returns the index of \n in string (not really that but technicaly is that)
      * */
     string[strcspn(string, "\n")] = '\0';
     size = strlen(string);
@@ -48,7 +51,7 @@ void encrypt(){
 #define GOOD_I string[i]
 #define EVIL_I string[size-(i+1)]
 
-    // note from 2025 salim: just swapping the macros are for readability
+    // note from 2025 salim: just swapping, the macros are for readability
     for(int i=0; i<size/2; i++){
         GOOD_I = GOOD_I + EVIL_I;
         EVIL_I = GOOD_I - EVIL_I;
@@ -62,9 +65,9 @@ void encrypt(){
 
     int private_key[size];
 
-    for (int k = 0; k < size; k++) {
-        private_key[k] = generate_key(BIN(string[k]));
-        string[k] = sum_binary(BIN(string[k]));
+    for (int i = 0; i < size; i++) {
+        private_key[i] = generate_key(BIN(string[i]));
+        string[i] = sum_binary(BIN(string[i]));
     }
     // integral_Reiman ------------------------------------------------------------
     float integrale[size];
@@ -80,45 +83,81 @@ void encrypt(){
 
     // Matrice --------------------------------------------------------------------
 
-    /* note from 2025 salim: la flem to continue to look up the rest of the code
-     * it works that is what matters (sorry)
+    /* note from 2025 salim: converted it into a matrix!!!
+     * basicaly a matrix is a array or addresses,
+     * an array of the 1st address of other arrays
+     *
+     * so  `float matrix[2][]` is the same as `float* matrix[2]`
+     * and `float integrale[]` is the same as `float* integrale`
+     *
+     * therefore we can store integral in the 1st element of the matrix (array of addresses)
+     * and the address of the HALF_SIZEth element in the second element of matrix
+     *
+     * it's just fancy bullshit to mean the same thing basicaly, we're just playing with addresses
      * */
 
-    int half_size;
-    if (size % 2 == 0)  half_size =   size/ 2;
-    else                half_size = (size/ 2)+1;
+#define HALF_SIZE  size / 2 + size % 2
 
-    float Matrix[half_size][2], transposed[2][half_size];
+    float* matrix[2], transposed[HALF_SIZE];
 
-    if (half_size * 2 > size) Matrix[half_size-1][1]=-1.00;
+    /*kinda useless*/
 
-    int k = 0;
-    for (int i = 0; i < half_size; i++) {
-        for (int j = 0 ; j < 2; j++){
-            if (i==half_size-1 && j == 1 && size % 2 != 0) break;
-            Matrix[i][j] = integrale[k];
-            k++;
-        }
-    }
-    printf("your encrypted message:\n");
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < half_size; j++) {
-            if (j==half_size-1 && i == 1 && size % 2 != 0) break;
-            transposed[i][j] = Matrix[j][i];
-            printf("%f ", transposed[i][j]);
-        }
-    }
+    /*matrix[0] = integrale;*/
+    /*matrix[1] = integrale + HALF_SIZE;*/
+
+    /*
+     * can be writen like the transposed one, we just know that the matrix has only two elements so 
+     * it's kinda the same as writing it twice since a for loop would take 2 lines
+     *
+     * where as in the transposed one, we can't know the size since it is a variable
+     * */
+
+    /* then we transpose the matrix (the matrix part was kinda useless so i commented it)
+     * even the transpose part is useless because it just the pair index on one side and the 
+     * odd ones on the other side 
+     * it means at the end you'll need to print the elements with a pair index first then 
+     * the element with an odd index, but whatever man
+     * */
+    for(int i = 0; i<size; i+=2)
+        transposed[i/2] = integrale[i];
+    
+
+    puts("your encrypted message:");
+
+    for(int i = 0; i<HALF_SIZE; i++)
+        printf("%f ", transposed[0]);
+    
+    for(int i = 0; i<HALF_SIZE; i++)
+        printf("%f ", transposed[1]);
+
+    /*alternatively
+
+    for(int i = 0; i<size; i+=2)
+        printf("%f ", integrale[i]);
+    
+    for(int i = 1; i<size; i+=2)
+        printf("%f ", integrale[i]);
+
+        or 
+
+#define PRINT_MESSAGE(START_INDEX)\
+    for(int i =START_INDEX; i<size; i+=2)\
+        printf("%f ", integrale[i]);
+
+        PRINT_MESSAGE(0)
+        PRINT_MESSAGE(1)
+     * */
 
     // Generate a private key ----------------------------------------------------
-    printf("\n\nyour private key: ");
+    puts("\nyour private key: ");
     for (int k = 0; k<size; k++){ printf("%d ", private_key[k]);
     }
     // Print encrypted text ------------------------------------------------------
 
-    printf("\n\n");
+    puts("");
     clock_t end = clock(); // tac
     float time_spent = (float)(end - begin) / CLOCKS_PER_SEC;
-    printf("\nexecution time: %fs\n", time_spent);
+    printf("execution time: %fs\n", time_spent);
     //----------------------------------------------------------------------------
 }
 
@@ -137,37 +176,8 @@ void decrypt() {
 
     printf("Enter the encrypted matrix values (Enter a non-numeric value to finish):\n");
 
-    i = -1;
-
-    do {
-        i++;
-        temporary_array= (float*) realloc(temporary_array, sizeof(float) * (i + 2));
-
-    } while ( scanf("%f", &temporary_array[i]) == 1);
-    fflush(stdin);
-
-    size = i;
-
-    if(size % 2 == 0)
-        half_size = (int) size/2;
-    else 
-        half_size = (int) size/2 +1;
-
-    printf("\n%d\n", size);
-
-
-    // input private key ---------------------------------------
-    int private_key[size] ;
-    printf("Enter the private key:\n");
-    for (int i = 0; i < size; i++) {
-        private_key[i] = -1;
-        do {
-            if (scanf(" %d", &private_key[i]) == 0){
-                fflush(stdin);
-                printf("Error: Invalid input\n");
-            }
-        } while (private_key[i] == -1);
-    }
+    /*TODO: write code to input the list of numbers, the numbers are 
+     * */
 
     clock_t begin = clock();
 
